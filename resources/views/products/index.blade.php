@@ -28,7 +28,7 @@
                         </div>
     
                         <div class="table-responsive p-1">
-                            <table class="table align-items-center table-bordered" id="productTable">
+                            <table class="table align-items-center table-bordered table-flush" id="productTable">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>ID</th>
