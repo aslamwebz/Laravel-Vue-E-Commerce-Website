@@ -12,7 +12,7 @@
                                     <h3 class="mb-0">{{ __('Customers') }}</h3>
                                 </div>
                                 <div class="col-4 text-right">
-                                    <a href="{{ route('product.create') }}" class="btn btn-sm btn-primary">{{ __('Add Customer') }}</a>
+                                    <a href="{{ route('customers.create') }}" class="btn btn-sm btn-primary">{{ __('Add Customer') }}</a>
                                 </div>
                             </div>
                         </div>      
@@ -32,10 +32,10 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>ID</th>
-                                        <th>Product Name</th>
-                                        <th>Product Cost</th>
-                                        <th>Product Price</th>
-                                        <th>Quantity</th>
+                                        <th>Customer Name</th>
+                                        <th>Customer Email</th>
+                                        <th>Customer Address</th>
+                                        <th>Customer Contact</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -43,28 +43,28 @@
                                     @foreach ($customers as $customer)
                                         <tr>
                                             <td>{{$customer->id}}</td>
-                                            {{-- <td><a href="{{route('product.show', $product->pid)}}">{{$product->product_name}}</a></td>
-                                            <td>{{$product->product_cost}}</td>
-                                            <td>{{$product->product_price}}</td>
-                                            <td>{{$product->product_quantity}}</td>
+                                            <td><a href="{{route('customers.show', $customer->id)}}">{{$customer->customer_name}}</a></td>
+                                            <td>{{$customer->customer_email}}</td>
+                                            <td>{{$customer->customer_address}}</td>
+                                            <td>{{$customer->customer_contact}}</td>
                                             <td class="text-right">
                                                     <div class="dropdown">
                                                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             <i class="fas fa-ellipsis-v"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                            <form action="{{ route('product.destroy', $product->pid) }}" method="POST">
+                                                            <form action="{{ route('customers.destroy', $customer->id) }}" method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 
-                                                                <a class="dropdown-item" href="{{ route('product.edit', $product->pid) }}">{{ __('Edit') }}</a>
-                                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this product?") }}') ? this.parentElement.submit() : ''">
+                                                                <a class="dropdown-item" href="{{ route('customers.edit', $customer->id) }}">{{ __('Edit') }}</a>
+                                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this customer?") }}') ? this.parentElement.submit() : ''">
                                                                     {{ __('Delete') }}
                                                                 </button>
                                                             </form>    
                                                         </div>
                                                     </div>
-                                                </td> --}}
+                                                </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -87,7 +87,7 @@
 @section('scripts')
 {{-- <script>
         $(document).ready( function () {
-            $('#productTable').DataTable();
+            $('#customerTable').DataTable();
     } );
     </script> --}}
 @endsection

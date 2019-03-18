@@ -39,8 +39,12 @@
                                     <div class="col-md-4">
                                          <div class="form-group{{ $errors->has('customer_name') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="customer_name">{{ __('Customer Name') }}</label>
-                                            <input type="text" name="customer_name" id="customer_name" class="form-control form-control-alternative{{ $errors->has('"customer_name') ? ' is-invalid' : '' }}" value="{{ old('"customer_name') }}" required autofocus>
-
+                                                <input type="text" id="customer_name"  @keyup="customerGet" @change="customerAdd"  required class="form-control" autocomplete="off"  list="browsersCustomers">
+                                                <datalist id="browsersCustomers">
+                                                    <span v-for="name in customerNames ">
+                                                        <option v-bind:value="name.customer_name">
+                                                    </span>
+                                                </datalist>
                                             @if ($errors->has('customer_name'))
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $errors->first('customer_name') }}</strong>
@@ -72,8 +76,12 @@
                                             @endif
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <button type="button" data-toggle="modal" data-target="#customerModal" class="btn btn-primary btn-sm">Add Customer</button>
+                                        <button v-on:click.prevent="clear" class="btn btn-primary btn-sm float-right" id="clear">Clear</button>
+                                    </div>
                                 </div>
-
+                                       
                                 <div class="row border-box">
                                     <div class="col-md-12  border-top-3">
                                         <div class="form-group">
@@ -103,7 +111,7 @@
                                             <tr>
                                                 <div class="row" >
                                                     <div class="col-md-4" v-bind:id="item">
-                                                        <input type="text"  @keyup="submitSearch" @change="itemAdd" name="nameArray[]" required class="form-control" autocomplete="off"  list="browsers">
+                                                        <input type="text"  @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="off"  list="browsers">
                                                     </div>
                                                     <datalist id="browsers">
                                                         <span v-for="name in resultName ">
@@ -200,14 +208,38 @@
                     </div>
                 </div>
             </div>
-        </div>
         
         @include('layouts.footers.auth')
+    
+
+ 
+
+    <!-- Modal -->
+    <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" v-on:click.prevent="addCustomer">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    
-        
-    
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+
 <script>
     const app = new Vue({
         el:'#createApp',
@@ -225,6 +257,7 @@
             currentItem:'',
             grandTotal:'',
             tax:'',
+            customerNames:[],
         },
         mounted(){
             this.items.push(this.item);
@@ -257,7 +290,7 @@
                 this.isResult = false;
             },
             submitSearch: function() {
-                axios.get('/api/index?q=' + this.query)
+                axios.get('/api/indexP?q=' + this.query)
                 .then((data) => {
                     // console.log(data.data)
                     this.resultName = data.data;
@@ -268,7 +301,7 @@
             },
             itemAdd(){
                let id =  this.item;  
-               axios.get('/api/index?q=' + $(`#${+id}`).children().val())
+               axios.get('/api/indexP?q=' + $(`#${+id}`).children().val())
                 .then((data) => {
                     // console.log(data.data)
                     this.resultName = data.data;
@@ -311,7 +344,35 @@
             },
             discountCounter(e){
                 this.discount = parseInt(this.grandTotal * e.target.value /100);
+            },
+            // Customer Section
+            customerGet(){
+                // console.log($('#customer_name').val())
+                axios.get('/api/indexC?q=' + $('#customer_name').val())
+                .then((data) => {
+                    this.customerNames = data.data;
+                });
+            },
+            customerAdd(){
+                axios.get('/api/indexC?q=' + $('#customer_name').val())
+                .then((data) => {
+                    for(let key in this.customerNames){
+                        $('#customer_address').val(this.customerNames[key]['customer_address']);
+                        $('#customer_contact').val(this.customerNames[key]['customer_contact']);
+                        $('#customer_email').val(this.customerNames[key]['customer_email']);
+                    }
+                })
+            },
+            addCustomer(){
+                console.log('modal hi')
+            },
+            clear(){
+                $('#customer_name').val('');
+                $('#customer_address').val('');
+                $('#customer_contact').val('');
+                $('#customer_email').val('');
             }
+
 
         }
     });

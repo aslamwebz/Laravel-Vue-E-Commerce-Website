@@ -17,4 +17,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/index', 'ProductController@indexApi');
+Route::get('/indexP', 'ProductController@indexApi');
+Route::get('/indexC', 'CustomerController@indexApi');

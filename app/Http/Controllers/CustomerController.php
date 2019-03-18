@@ -17,6 +17,14 @@ class CustomerController extends Controller
         return view ('customers.index', ['customers' => $customers->paginate(10)]);
     }
 
+    public function indexApi(Request $request)
+    {
+
+        $query = $request->q;
+        $customer = Customers::where('customer_name', 'LIKE', '%'.$query.'%')->get();
+        return $customer;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,7 +50,7 @@ class CustomerController extends Controller
             'customer_contact' => 'required|string|max:255',
         ]);
 
-        Customer::save($request->all());
+        Customers::create($request->all());
 
         return redirect()->route('customers.index')->with('success', 'Customer has been added');
     }

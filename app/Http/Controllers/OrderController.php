@@ -37,13 +37,13 @@ class OrderController extends Controller
     {
         $request->validate([
             'order_to' => 'required|string|max:255',
-            'order_detail' => 'required|string|max:255',
+            // 'order_details' => 'required|string|max:255',
             'order_date' => 'required|string|max:255',
             'due_date' => 'required|string|max:255',
             'order_status' => 'required|string|max:255',
         ]);
 
-        Order::save($request->all());
+        Order::create($request->all());
 
         return redirect()->route('orders.index')->with('success', 'Order has been added');
     }
@@ -81,7 +81,7 @@ class OrderController extends Controller
     {
         $request->validate([
             'order_to' => 'required|string|max:255',
-            'order_detail' => 'required|string|max:255',
+            // 'order_details' => 'required|string|max:255',
             'order_date' => 'required|string|max:255',
             'due_date' => 'required|string|max:255',
             'order_status' => 'required|string|max:255',

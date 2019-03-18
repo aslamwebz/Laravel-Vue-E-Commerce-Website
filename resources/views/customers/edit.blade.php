@@ -1,95 +1,91 @@
-@extends('layouts.app', ['title' => __('Product Management')])
+@extends('layouts.app', ['title' => __('Customer Management')])
 
 @section('content')
-    @include('products.partials.header', ['title' => __('Add Product')])   
+    @include('products.partials.header', ['title' => __('')])   
 
     <div class="container-fluid mt--7">
         <div class="row">
-            <div class="col-xl-12 order-xl-1">
-                <div class="card bg-secondary shadow">
+            <div class="col-xl-8 offset-xl-2 order-xl-1">
+                <div class="card bg-secondary shadow mt--4">
                     <div class="card-header bg-white border-0">
                         <div class="row ">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Product Management') }}</h3>
+                                <h3 class="mb-0">{{ __('Customer Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('product.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                                <a href="{{ route('customers.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="card-body">
-                            <form method="post" action="{{ route('product.update', $product) }}" autocomplete="off" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('customers.update', $customer->id) }}" autocomplete="off" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
-                                <h6 class="heading-small text-muted mb-4">{{ __('Product information') }}</h6>
+                                @method('put')
+                                <h6 class="heading-small text-muted mb-4">{{ __('Customer information') }}</h6>
                                 <div class="pl-lg-4">
-                                    <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="product-name">{{ __('Product Name') }}</label>
-                                        <input type="text" name="product_name" id="product-name" class="form-control form-control-alternative{{ $errors->has('product_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Product Name') }}" value="{{ $product->product_name }}" required autofocus>
-
-                                        @if ($errors->has('product_name'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('product_name') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                    <div class="form-group{{ $errors->has('product_quantity') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="product-quantity">{{ __('Product Quantity') }}</label>
-                                        <input type="number" name="product_quantity" id="product-quantity" class="form-control form-control-alternative{{ $errors->has('product_quantity') ? ' is-invalid' : '' }}" placeholder="{{ __('Product Quantity') }}" value="{{ $product->product_quantity }}" required autofocus>
-
-                                        @if ($errors->has('product_quantity'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('product_quantity') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group{{ $errors->has('product_cost') ? ' has-danger' : '' }}">
-                                                <label class="form-control-label" for="product_cost">{{ __('Product Cost') }}</label>
-                                                <input type="number" name="product_cost" id="product_cost" class="form-control form-control-alternative{{ $errors->has('product_cost') ? ' is-invalid' : '' }}" placeholder="{{ __('Product Cost') }}" value="{{ $product->product_cost }}" required autofocus>
-
-                                                @if ($errors->has('product_cost'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('product_cost') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group{{ $errors->has('product_price') ? ' has-danger' : '' }}">
-                                                    <label class="form-control-label" for="product_price">{{ __('Product Price') }}</label>
-                                                    <input type="number" name="product_price" id="product_price" class="form-control form-control-alternative{{ $errors->has('product_price') ? ' is-invalid' : '' }}" placeholder="{{ __('Product Price') }}" value="{{ $product->product_price }}" required autofocus>
-                
-                                                    @if ($errors->has('product_price'))
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group{{ $errors->has('customer_name') ? ' has-danger' : '' }}">
+                                                    <label class="form-control-label" for="customer_name">{{ __('Customer Name') }}</label>
+                                                    <input type="text" name="customer_name" id="customer_name" class="form-control 
+                                                    form-control-alternative{{ $errors->has('customer_name') ? ' is-invalid' : '' }}" 
+                                                    value="{{ $customer->customer_name }}" required autofocus>
+            
+                                                    @if ($errors->has('customer_name'))
                                                         <span class="invalid-feedback" role="alert">
-                                                            <strong>{{ $errors->first('product_price') }}</strong>
+                                                            <strong>{{ $errors->first('customer_name') }}</strong>
                                                         </span>
                                                     @endif
+                                                </div> 
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group{{ $errors->has('customer_email') ? ' has-danger' : '' }}">
+                                                    <label class="form-control-label" for="customer_email">{{ __('Customer Email') }}</label>
+                                                    <input type="text" name="customer_email" id="customer_email" class="form-control 
+                                                    form-control-alternative{{ $errors->has('customer_email') ? ' is-invalid' : '' }}" 
+                                                    value="{{ $customer->customer_email }}" required autofocus>
+            
+                                                    @if ($errors->has('customer_email'))
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $errors->first('customer_email') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div> 
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group{{ $errors->has('product_description') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="product_description">{{ __('Product Description') }}</label>
-                                            <textarea type="text" name="product_description" rows="7" id="product_description" class="form-control form-control-alternative{{ $errors->has('product_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Product Description') }}"  required autofocus>{{$product->product_description }}</textarea>
-        
-                                            @if ($errors->has('product_description'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('product_description') }}</strong>
-                                                </span>
-                                            @endif
-                                    </div>
-                                    <div class="form-group{{ $errors->has('product_image') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="product_image">{{ __('Product Image') }}</label>
-                                            <input type="text" name="product_image" id="product_image" class="form-control form-control-alternative{{ $errors->has('product_image') ? ' is-invalid' : '' }}" placeholder="{{ __('Product Image') }}" value="{{ $product->product_image ? $product->product_image:''}}" required autofocus>
-        
-                                            @if ($errors->has('product_image'))
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $errors->first('product_image') }}</strong>
-                                                </span>
-                                            @endif
-                                    </div>                                                                
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group{{ $errors->has('customer_address') ? ' has-danger' : '' }}">
+                                                    <label class="form-control-label" for="customer_address">{{ __('Customer Address') }}</label>
+                                                    <input type="text" name="customer_address" id="customer_address" class="form-control 
+                                                    form-control-alternative{{ $errors->has('customer_address') ? ' is-invalid' : '' }}" 
+                                                    value="{{ $customer->customer_address }}" required autofocus>
+            
+                                                    @if ($errors->has('customer_address'))
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $errors->first('customer_address') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div> 
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group{{ $errors->has('customer_contact') ? ' has-danger' : '' }}">
+                                                    <label class="form-control-label" for="customer_contact">{{ __('Customer Contact') }}</label>
+                                                    <input type="text" name="customer_contact" id="customer_contact" class="form-control 
+                                                    form-control-alternative{{ $errors->has('customer_contact') ? ' is-invalid' : '' }}" 
+                                                    value="{{ $customer->customer_contact }}" required autofocus>
+            
+                                                    @if ($errors->has('customer_contact'))
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $errors->first('customer_contact') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>                                                        
                                     <div class="">
                                         <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                     </div>
@@ -100,6 +96,7 @@
                 </div>
             </div>
         </div>
+        
         @include('layouts.footers.auth')
     </div>
 @endsection

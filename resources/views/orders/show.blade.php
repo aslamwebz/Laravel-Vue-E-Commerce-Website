@@ -1,7 +1,7 @@
-@extends('layouts.app', ['title' => __('Product Management')])
+@extends('layouts.app', ['title' => __('Order Management')])
 
 @section('content')
-@include('products.partials.header', ['title' => __($product->product_name)])   
+@include('products.partials.header', ['title' => __($order->order_details)])   
 
 <div class="container-fluid mt--7">
     <div class="row">
@@ -9,27 +9,24 @@
             <div class="card bg-secondary shadow">
                 <div class="container p-2" >
                     <div class="row">
-                        <div class="col-md-6 p-4">
-                            <img src="img/details_1.jpg" alt="" height="400" width="400">
-                        </div>
-                        <div class="col-md-6">
-                            <div class="container pt-4 pb-4 ml--7">
+                        <div class="col-md-8">
+                            <div class="container pt-4 pb-4 ">
                                 <div class="pt-3">
-                                    <h2>Product Name</h2>
-                                    <input type="text" disabled value="{{$product->product_name}}" class="form-control">
+                                    <h2>Order To</h2>
+                                    <input type="text" disabled value="{{$order->order_to}}" class="form-control">
                                 </div>
                                 
                                 <div class="pt-3">
-                                    <h2>Product Cost</h2>
-                                    <input type="text" disabled value="{{$product->product_cost}}" class="form-control">
+                                    <h2>Order Date</h2>
+                                    <input type="text" disabled value="{{$order->order_date}}" class="form-control">
                                 </div>
                                 <div class="pt-3">
-                                    <h2>Product Price</h2>
-                                    <input type="text" disabled value="{{$product->product_price}}" class="form-control">
+                                    <h2>Due Date</h2>
+                                    <input type="text" disabled value="{{$order->due_date}}" class="form-control">
                                 </div>
                                 <div class="pt-3">
-                                    <h2>Product Quantity</h2>
-                                    <input type="text" disabled value="{{$product->product_quantity}}" class="form-control">
+                                    <h2>Order Status</h2>
+                                    <input type="text" disabled value="{{$order->order_status}}" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -37,12 +34,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pt-3 m-3">
-                                <h2>Product Description</h2>
-                                <textarea type="text" disabled rows="30" class="form-control">{{$product->product_description}}</textarea>
+                                <h2>Order Description</h2>
+                                <textarea type="text" disabled rows="30" class="form-control">{{$order->order_details}}</textarea>
                             </div>
                             <div class="col-12 text-right">
-                                <a href="{{ route('products.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
-                                <a href="{{ route('products.edit', $product->pid) }}" class="btn btn-sm btn-info">{{ __('Edit Product') }}</a>
+                                <a href="{{ route('orders.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                                <a href="{{ route('orders.edit', $order->id) }}" class="btn btn-sm btn-info">{{ __('Edit Order') }}</a>
                             </div>
                         </div>
                     </div>
