@@ -46,7 +46,11 @@
                                     @foreach ($sales as $sale)
                                         <tr>
                                             <td>{{$sale->id}}</td>
-                                            <td>{{$sale->product_id}}</td>
+                                            <td>
+                                               @foreach( unserialize($sale->items) as $item)
+                                                    {{ $item['product_name'] }}
+                                               @endforeach
+                                            </td>
                                             <td><a href="{{route('sales.show', $sale->id)}}">{{$sale->description}}</a></td>
                                             <td>{{$sale->sale_date}}</td>
                                             <td>{{$sale->sold_to}}</td>

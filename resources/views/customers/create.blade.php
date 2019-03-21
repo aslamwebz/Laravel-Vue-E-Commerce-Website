@@ -21,7 +21,7 @@
                         <div class="card-body">
                             <form method="POST" action="{{ route('customers.store') }}" autocomplete="off" enctype="multipart/form-data">
                                 @csrf
-                                
+                                <input type="text" class="hidden" value="cuctomer" name="type">
                                 <h6 class="heading-small text-muted mb-4">{{ __('Customer information') }}</h6>
                                 <div class="pl-lg-4">
                                     <div class="container">

@@ -32,14 +32,14 @@
                     </div>
                     <div class="col-md-12">
                         <div class="card-body">
-                            <form method="POST" action="{{ route('sales.store') }}" autocomplete="off" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('sales.store') }}"  autocomplete="offf" >
                                 @csrf
                                 <h6 class="heading-small text-muted mb-4">{{ __('Add Sales Data') }}</h6>
                                 <div class="row border-box mt--4">
                                     <div class="col-md-4">
                                          <div class="form-group{{ $errors->has('customer_name') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="customer_name">{{ __('Customer Name') }}</label>
-                                                <input type="text" id="customer_name"  @keyup="customerGet" @change="customerAdd"  required class="form-control" autocomplete="off"  list="browsersCustomers">
+                                                <input type="text" id="customer_name" name="customer_name" @keyup="customerGet" @change="customerAdd" required class="form-control" autocomplete="offf"  list="browsersCustomers">
                                                 <datalist id="browsersCustomers">
                                                     <span v-for="name in customerNames ">
                                                         <option v-bind:value="name.customer_name">
@@ -55,7 +55,7 @@
                                     <div class="col-md-4">
                                          <div class="form-group{{ $errors->has('customer_address') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="customer_address">{{ __('Address') }}</label>
-                                            <input type="text" name="customer_address" id="customer_address" class="form-control form-control-alternative{{ $errors->has('customer_address') ? ' is-invalid' : '' }}" value="{{ old('customer_address') }}" required autofocus>
+                                            <input type="text" name="customer_address" autocomplete="offf" id="customer_address" class="form-control form-control-alternative{{ $errors->has('customer_address') ? ' is-invalid' : '' }}" value="{{ old('customer_address') }}" required autofocus>
 
                                             @if ($errors->has('customer_address'))
                                                 <span class="invalid-feedback" role="alert">
@@ -67,7 +67,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group{{ $errors->has('customer_contact') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="customer_contact">{{ __('Contact') }}</label>
-                                            <input type="text" name="customer_contact" id="customer_contact" class="form-control form-control-alternative{{ $errors->has('customer_contact') ? ' is-invalid' : '' }}" value="{{ old('customer_contact') }}" required autofocus>
+                                            <input type="text" name="customer_contact" autocomplete="offf" id="customer_contact" class="form-control form-control-alternative{{ $errors->has('customer_contact') ? ' is-invalid' : '' }}" value="{{ old('customer_contact') }}" required autofocus>
 
                                             @if ($errors->has('customer_contact'))
                                                 <span class="invalid-feedback" role="alert">
@@ -111,7 +111,7 @@
                                             <tr>
                                                 <div class="row" >
                                                     <div class="col-md-4" v-bind:id="item">
-                                                        <input type="text"  @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="off"  list="browsers">
+                                                        <input type="text"  @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="offf"  list="browsers">
                                                     </div>
                                                     <datalist id="browsers">
                                                         <span v-for="name in resultName ">
@@ -125,7 +125,7 @@
                                                         <input type="text" sname="priceArray[]" class="form-control" disabled>
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <input type="text" name="quantityArray[]" class="form-control" @change="totalCount">
+                                                        <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <input type="text" sname="totalArray[]" class="form-control" id="total" disabled>
@@ -139,68 +139,89 @@
                                     </div>
 
                                     </div>
-                                        <div class="col-md-12">
-                                            <button v-on:click.prevent="add" class="btn btn-primary" id="addButton">Add Product</button>
+                                    <div class="col-md-12">
+                                        <button v-on:click.prevent="add" class="btn btn-primary" id="addButton">Add Product</button>
+                                    </div>
+                                </div>
+
+                                <div class="row border-box">
+                                    <div class="col-md-3">
+                                        <div class="form-group{{ $errors->has('discount') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="product-quantity">{{ __('Discount') }}</label>
+                                            <input type="number" name="discount" id="product-quantity" 
+                                            class="form-control form-control-alternative{{ $errors->has('discount') ? ' is-invalid' : '' }}" 
+                                            value="{{ old('discount') }}" @change="discountCounter"  autofocus>
+
+                                            @if ($errors->has('discount'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('discount') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group{{ $errors->has('tax') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="product-quantity">{{ __('Tax') }}</label>
+                                            <input type="number" name="tax" id="product-quantity" 
+                                            class="form-control form-control-alternative{{ $errors->has('tax') ? ' is-invalid' : '' }}" 
+                                            value="{{ old('tax') }}" @change="taxCounter" autofocus>
 
-                                    <div class="row border-box">
-                                        <div class="col-md-3">
-                                            <div class="form-group{{ $errors->has('discount') ? ' has-danger' : '' }}">
-                                                <label class="form-control-label" for="product-quantity">{{ __('Discount') }}</label>
-                                                <input type="number" name="discount" id="product-quantity" class="form-control form-control-alternative{{ $errors->has('discount') ? ' is-invalid' : '' }}" value="{{ old('discount') }}" required autofocus>
+                                            @if ($errors->has('tax'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('tax') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group{{ $errors->has('payment_type') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="product-quantity">{{ __('Payment Type') }}</label>
+                                            <select name="payment_type" id="product-quantity" 
+                                            class="form-control form-control-alternative{{ $errors->has('payment_type') ? ' is-invalid' : '' }}" 
+                                            value="{{ old('payment_type') }}" required autofocus>
+                                                <option value="cash" selected>Cash</option>
+                                                <option value="visa">Visa</option>
+                                                <option value="master">Master</option>
+                                                <option value="paypal">Paypal</option>
+                                                <option value="check">Check</option>
+                                            </select>
+                                            @if ($errors->has('payment_type'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('payment_type') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group{{ $errors->has('grand_total') ? ' has-danger' : '' }}">
+                                            <label class="form-control-label" for="product-quantity">{{ __('Grand Total') }}</label>
+                                            <input type="number" name="grand_total" id="product-quantity" 
+                                            class="form-control form-control-alternative{{ $errors->has('grand_total') ? ' is-invalid' : '' }}" 
+                                            value="{{ old('grand_total') }}" v-model="grandTotal" required autofocus disabled>
 
-                                                @if ($errors->has('discount'))
+                                            @if ($errors->has('grand_total'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('grand_total') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                            <div class="form-group{{ $errors->has('sold_by') ? ' has-danger' : '' }}">
+                                                <label class="form-control-label" for="product-quantity">{{ __('Seller') }}</label>
+                                                <input type="text" name="sold_by" id="product-quantity" 
+                                                class="form-control form-control-alternative{{ $errors->has('sold_by') ? ' is-invalid' : '' }}" 
+                                                value="{{  auth()->user()->name }}"  required autofocus autocomplete="offf">
+
+                                                @if ($errors->has('sold_by'))
                                                     <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('discount') }}</strong>
+                                                        <strong>{{ $errors->first('sold_by') }}</strong>
                                                     </span>
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group{{ $errors->has('tax') ? ' has-danger' : '' }}">
-                                                <label class="form-control-label" for="product-quantity">{{ __('Tax') }}</label>
-                                                <input type="number" name="tax" id="product-quantity" class="form-control form-control-alternative{{ $errors->has('tax') ? ' is-invalid' : '' }}" value="{{ old('tax') }}" @change="taxCounter" required autofocus>
-
-                                                @if ($errors->has('tax'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('tax') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group{{ $errors->has('payment_type') ? ' has-danger' : '' }}">
-                                                <label class="form-control-label" for="product-quantity">{{ __('Payment Type') }}</label>
-                                                <select name="payment_type" id="product-quantity" class="form-control form-control-alternative{{ $errors->has('payment_type') ? ' is-invalid' : '' }}" value="{{ old('payment_type') }}" required autofocus>
-                                                    <option value="cash" selected>Cash</option>
-                                                    <option value="visa">Visa</option>
-                                                    <option value="master">Master</option>
-                                                    <option value="paypal">Paypal</option>
-                                                    <option value="check">Check</option>
-                                                </select>
-                                                @if ($errors->has('payment_type'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('payment_type') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="form-group{{ $errors->has('grand_total') ? ' has-danger' : '' }}">
-                                                <label class="form-control-label" for="product-quantity">{{ __('Grand Total') }}</label>
-                                                <input type="number" name="grand_total" id="product-quantity" class="form-control form-control-alternative{{ $errors->has('grand_total') ? ' is-invalid' : '' }}" value="{{ old('grand_total') }}" v-model="grandTotal" required autofocus>
-
-                                                @if ($errors->has('grand_total'))
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $errors->first('grand_total') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button type="submit" class="btn btn-success mt-4  float-right" id="submitButton">{{ __('Add') }}</button>
-                                        </div>
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-success mt-4  float-right" >{{ __('Add') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -208,7 +229,8 @@
                     </div>
                 </div>
             </div>
-        
+        </div>
+    </div>
         @include('layouts.footers.auth')
     
 
@@ -225,11 +247,31 @@
               </button>
             </div>
             <div class="modal-body">
-              ...
+            <form action="{{route('customers.store')}}" method="post">
+                @csrf
+                <div class="form-group">
+                    <label for="">Customer Name</label>
+                    <input type="text" class="form-control" name="customer_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="">Customer Email</label>
+                    <input type="text" class="form-control" name="customer_email" required>
+                </div>
+                <div class="form-group">
+                    <label for="">Customer Address</label>
+                    <input type="text" class="form-control" name="customer_address" required>
+                </div>
+                <div class="form-group">
+                    <label for="">Customer Contact</label>
+                    <input type="text" class="form-control" name="customer_contact" required>
+                </div>
+                <input type="text" class="hidden" value="sales" name="type">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" v-on:click.prevent="addCustomer">Save changes</button>
+            <div class="modal-footer mt--5">
+        
             </div>
           </div>
         </div>
@@ -255,13 +297,14 @@
                 price:'price',
             }],
             currentItem:'',
+            total:'',
             grandTotal:'',
             tax:'',
             customerNames:[],
         },
         mounted(){
             this.items.push(this.item);
-            $('#submitButton').hide();
+            // $('#submitButton').hide();
             $('#addButton').hide();
         },
         methods:{
@@ -326,24 +369,38 @@
                 $('#addButton').show();
                 let id = this.item;  
                 var totalCount = $(`#${+id}`).siblings().eq(4).children();
-                var total = e.target.value * this.result.cost;
-                totalCount.val(total);
-                this.grandTotal = parseInt(this.grandTotal + total);
+                var curTotal = e.target.value * this.result.cost;
+                totalCount.val(curTotal);
+                this.total = parseInt(this.total + curTotal);
 
                 this.grandTotalCounter();
             },
-            grandTotalCounter(){
-                if(this.grandTotal <= 0){
-                    $('#submitButton').hide();
-                } else{
-                    $('#submitButton').show();
-                }
-            },
+         
             taxCounter(e){
                 this.tax = parseInt(this.grandTotal * e.target.value /100);
+                this.grandTotalCounter();
             },
             discountCounter(e){
                 this.discount = parseInt(this.grandTotal * e.target.value /100);
+                this.grandTotalCounter();
+            },
+            grandTotalCounter(){
+                // if(this.grandTotal <= 0){
+                //     $('#submitButton').hide();
+                // } else{
+                //     $('#submitButton').show();
+                // }
+
+                this.grandTotal = this.total;
+
+                if(this.tax >= 1){
+                    this.grandTotal += this.tax;
+                }
+
+                if(this.discount >= 1){
+                    this.grandTotal -= this.discount;
+                }
+
             },
             // Customer Section
             customerGet(){
@@ -362,9 +419,17 @@
                         $('#customer_email').val(this.customerNames[key]['customer_email']);
                     }
                 })
+                .catch({
+                })
             },
             addCustomer(){
-                console.log('modal hi')
+                axios.post('/api/store')
+                .then({
+                    
+                })
+                .catch({
+
+                })
             },
             clear(){
                 $('#customer_name').val('');

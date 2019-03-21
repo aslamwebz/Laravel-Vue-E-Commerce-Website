@@ -52,6 +52,10 @@ class CustomerController extends Controller
 
         Customers::create($request->all());
 
+        if($request->type = "sales"){
+            return redirect()->route('sales.create');
+        }
+        
         return redirect()->route('customers.index')->with('success', 'Customer has been added');
     }
 

@@ -15,15 +15,12 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('product_id');
+            $table->text('items');
             $table->date('sale_date');
             $table->string('customer_name');
             $table->string('customer_address');
             $table->string('customer_contact');
             $table->string('payment_type');
-            $table->integer('quantity');
-            $table->text('description');
-            $table->string('unit_price');
             $table->decimal('discount', 8, 2)->nullable();
             $table->decimal('tax', 8, 2)->nullable();
             $table->string('sold_by');

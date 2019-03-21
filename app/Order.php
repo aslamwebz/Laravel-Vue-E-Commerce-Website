@@ -12,6 +12,5 @@ class Order extends Model
         'due_date',
         'order_details',
         'order_status',
-
     ];
 }

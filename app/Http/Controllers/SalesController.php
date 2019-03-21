@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Sales;
+use App\Product;
 
 class SalesController extends Controller
 {
@@ -14,6 +15,8 @@ class SalesController extends Controller
      */
     public function index(Sales $sales)
     {
+        // $sales = Sales::all();
+        // $items = unserialize($sales[0][0]);
         return view('sales.index', ['sales' => $sales->paginate(10)]);
     }
 
@@ -61,8 +64,17 @@ class SalesController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_address' => 'required|string|max:255',
+            'customer_contact' => 'required|string|max:255',
+            'payment_type' => 'required|string|max:255',
+            'grand_total' => 'required|string|max:255',
+            'sold_by' => 'required|string|max:255',
+        ]);
+      
+
         $count = 0;
-        $sale_array = [];
         $name_array = $request->nameArray;
         $quantity_array = $request->quantityArray;
         // dd($quantity_array);
@@ -71,29 +83,29 @@ class SalesController extends Controller
         // }
 
         foreach($name_array as $a => $b){
-            $sale_array[$b] = $quantity_array[$a]; 
+            $product = Product::where('product_name', 'LIKE', '%'.$b.'%')->get();
+            $products[$a]['id'] = $product[0]['pid'];
+            $products[$a]['product_name'] = $product
+            [0]['product_name'];
+            $products[$a]['quantity'] = $quantity_array[$a];
+            // $sale_array[$b] = $quantity_array[$a]; 
         }
 
-        dd($sale_array);
-        // $request->validate([
-        //     'sold_to' => 'required|string|max:255',
-        //     'payment_method' => 'required|string|max:255',
-        //     'quantity' => 'required|numeric|between:0,9999.99',
-        //     'description' => 'required|string',
-        //     'unit_price' => 'required|numeric|between:0,9999.99',
-        //     'discount' => 'required|numeric|between:0,9999.99',
-        //     'sold_by' => 'required|string|max:255',
-        //     'total' =>  'required|numeric',
-        // ]);
+        $date = date('Y:m:d');
+        $items = serialize($products);
+        // $items = json_encode($products);
+        $request->merge(['sale_date' => $date]);
+        $request->merge(['items' => $items]);
 
 
-        // $date = date('Y:m:d');
 
-        // $request->merge(['date' => $date]);
+        if(Sales::create($request->all())){
+            return redirect()->route('sales.index')->with('success', "Invoice added successfully");
+        } else {
+            return redirect()->route('sales.create')->with('error', "Invoice error");
+        }
 
-        // Sales::create($request->all());
 
-        // return redirect()->route('sales.index')->with('success', "Invoice added successfully");
     }
 
     /**
