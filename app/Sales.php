@@ -14,6 +14,7 @@ class Sales extends Model
         'payment_type',
         'discount',
         'tax',
+        'total',
         'grand_total',
         'sold_by',
         'items',

@@ -31,32 +31,29 @@
                             <table class="table align-items-center table-flush table-bordered">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>Invoice ID</th>
-                                        <th>Product ID</th>
-                                        <th>Description</th>
+                                        <th>Invoice No</th>
                                         <th>Sale Date</th>
-                                        <th>Sold To</th>
-                                        <th>Quantity</th>
-                                        <th>Unit Price</th>
-                                        <th>Total</th>
+                                        <th>Customer</th>
+                                        <th>Payment Type</th>
+                                        <th>Seller</th>
+                                        <th>Grand Total</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($sales as $sale)
                                         <tr>
-                                            <td>{{$sale->id}}</td>
-                                            <td>
+                                            <td><a href="{{route('sales.show', $sale->id)}}">#0000{{$sale->id}}</a></td>
+                                            {{-- <td>
                                                @foreach( unserialize($sale->items) as $item)
                                                     {{ $item['product_name'] }}
                                                @endforeach
-                                            </td>
-                                            <td><a href="{{route('sales.show', $sale->id)}}">{{$sale->description}}</a></td>
+                                            </td> --}}
                                             <td>{{$sale->sale_date}}</td>
-                                            <td>{{$sale->sold_to}}</td>
-                                            <td>{{$sale->quantity}}</td>
-                                            <td>{{$sale->unit_price}}</td>
-                                            <td>{{$sale->total}}</td>
+                                            <td><a href="#">{{$sale->customer_name}}</a></td>
+                                            <td>{{$sale->payment_type}}</td>
+                                            <td>{{$sale->sold_by}}</td>
+                                            <td>{{$sale->grand_total}}</td>
                                             <td class="text-right">
                                                 <div class="dropdown">
                                                     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

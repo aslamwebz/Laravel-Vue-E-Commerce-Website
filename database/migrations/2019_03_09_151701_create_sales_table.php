@@ -24,6 +24,7 @@ class CreateSalesTable extends Migration
             $table->decimal('discount', 8, 2)->nullable();
             $table->decimal('tax', 8, 2)->nullable();
             $table->string('sold_by');
+            $table->integer('total');
             $table->integer('grand_total');
             $table->timestamps();
         });

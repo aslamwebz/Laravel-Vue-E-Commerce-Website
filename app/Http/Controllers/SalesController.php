@@ -17,7 +17,7 @@ class SalesController extends Controller
     {
         // $sales = Sales::all();
         // $items = unserialize($sales[0][0]);
-        return view('sales.index', ['sales' => $sales->paginate(10)]);
+        return view('sales.index',compact('product'), ['sales' => $sales->paginate(10)]);
     }
 
     public function test(Request $request){
@@ -64,12 +64,13 @@ class SalesController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_address' => 'required|string|max:255',
             'customer_contact' => 'required|string|max:255',
             'payment_type' => 'required|string|max:255',
-            'grand_total' => 'required|string|max:255',
+            'grand_total' => 'required',
             'sold_by' => 'required|string|max:255',
         ]);
       
@@ -77,6 +78,8 @@ class SalesController extends Controller
         $count = 0;
         $name_array = $request->nameArray;
         $quantity_array = $request->quantityArray;
+        $cost_array = $request->quantityArray;
+        $price_array = $request->quantityArray;
         // dd($quantity_array);
         // foreach($name_array as $a){
         //    array_push($sale_array,$a,$quantity_array[$count++]);
@@ -88,6 +91,8 @@ class SalesController extends Controller
             $products[$a]['product_name'] = $product
             [0]['product_name'];
             $products[$a]['quantity'] = $quantity_array[$a];
+            $products[$a]['price'] = $price_array[$a];
+            $products[$a]['cost'] = $cost_array[$a];
             // $sale_array[$b] = $quantity_array[$a]; 
         }
 

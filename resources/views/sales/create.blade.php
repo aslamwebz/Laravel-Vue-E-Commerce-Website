@@ -119,10 +119,10 @@
                                                         </span>
                                                     </datalist>
                                                     <div class="col-md-2">
-                                                        <input type="text" sname="costArray[]" class="form-control" disabled>
+                                                        <input type="text" name="costArray[]" class="form-control" >
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="text" sname="priceArray[]" class="form-control" disabled>
+                                                        <input type="text" name="priceArray[]" class="form-control" disabled>
                                                     </div>
                                                     <div class="col-md-1">
                                                         <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required>
@@ -193,11 +193,25 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
+                                            <div class="form-group{{ $errors->has('total') ? ' has-danger' : '' }}">
+                                                <label class="form-control-label" for="total">{{ __('Sub Total') }}</label>
+                                                <input type="number" name="total" id="total" 
+                                                class="form-control form-control-alternative{{ $errors->has('total') ? ' is-invalid' : '' }}" 
+                                                v-model="total" required autofocus >
+    
+                                                @if ($errors->has('total'))
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $errors->first('total') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    <div class="col-md-3">
                                         <div class="form-group{{ $errors->has('grand_total') ? ' has-danger' : '' }}">
-                                            <label class="form-control-label" for="product-quantity">{{ __('Grand Total') }}</label>
-                                            <input type="number" name="grand_total" id="product-quantity" 
+                                            <label class="form-control-label" for="grand_total">{{ __('Grand Total') }}</label>
+                                            <input type="number" name="grand_total" id="grand_total" 
                                             class="form-control form-control-alternative{{ $errors->has('grand_total') ? ' is-invalid' : '' }}" 
-                                            value="{{ old('grand_total') }}" v-model="grandTotal" required autofocus disabled>
+                                            v-model="grandTotal" required autofocus >
 
                                             @if ($errors->has('grand_total'))
                                                 <span class="invalid-feedback" role="alert">
@@ -208,8 +222,8 @@
                                     </div>
                                     <div class="col-md-3">
                                             <div class="form-group{{ $errors->has('sold_by') ? ' has-danger' : '' }}">
-                                                <label class="form-control-label" for="product-quantity">{{ __('Seller') }}</label>
-                                                <input type="text" name="sold_by" id="product-quantity" 
+                                                <label class="form-control-label" for="sold_by">{{ __('Seller') }}</label>
+                                                <input type="text" name="sold_by" id="sold_by" 
                                                 class="form-control form-control-alternative{{ $errors->has('sold_by') ? ' is-invalid' : '' }}" 
                                                 value="{{  auth()->user()->name }}"  required autofocus autocomplete="offf">
 
