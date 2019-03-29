@@ -128,7 +128,7 @@
                                                         <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" disabled>
+                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" readonly>
                                                     </div>
                                                     <div class="col-md-1">
                                                         <button class="btn btn-outline-danger" type="button" v-on:click.prevent="rem(item)"id="button-del">X</button>
@@ -197,7 +197,7 @@
                                                 <label class="form-control-label" for="total">{{ __('Sub Total') }}</label>
                                                 <input type="number" name="total" id="total" 
                                                 class="form-control form-control-alternative{{ $errors->has('total') ? ' is-invalid' : '' }}" 
-                                                v-model="total" required autofocus >
+                                                v-model="subTotal" required autofocus readonly>
     
                                                 @if ($errors->has('total'))
                                                     <span class="invalid-feedback" role="alert">
@@ -211,7 +211,7 @@
                                             <label class="form-control-label" for="grand_total">{{ __('Grand Total') }}</label>
                                             <input type="number" name="grand_total" id="grand_total" 
                                             class="form-control form-control-alternative{{ $errors->has('grand_total') ? ' is-invalid' : '' }}" 
-                                            v-model="grandTotal" required autofocus >
+                                            v-model="grandTotal" required autofocus readonly>
 
                                             @if ($errors->has('grand_total'))
                                                 <span class="invalid-feedback" role="alert">
@@ -235,7 +235,7 @@
                                             </div>
                                         </div>
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-success mt-4  float-right" >{{ __('Add') }}</button>
+                                        <button type="submit" class="btn btn-success mt-4  float-right" >{{ __('Add Receipt') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -247,10 +247,7 @@
     </div>
         @include('layouts.footers.auth')
     
-
- 
-
-    <!-- Modal -->
+    <!-- Modal for Customer Add -->
     <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -295,6 +292,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 
 <script>
     const app = new Vue({
@@ -311,82 +309,94 @@
                 price:'price',
             }],
             currentItem:'',
-            total:'',
+            subTotal:'',
             grandTotal:'',
             tax:'',
             customerNames:[],
         },
         mounted(){
+            // Push a blank item to get a starting product input value 
             this.items.push(this.item);
-            // $('#submitButton').hide();
             $('#addButton').hide();
         },
         methods:{
             add(){
+                // Adding an item with a numeric val to serve as a key point and push it to item array
                 this.item = this.i;
                 this.items.push(this.item);
                 $('#addButton').hide();
             },
             rem(item){
+
+                // Get and remove the item from the invoice
                 const todoIndex = this.items.indexOf(item);
                 this.items.splice(todoIndex, 1);
 
-                let id = item;
-                var totalCount = $(`#${+id}`).siblings().eq(4).children().val();
-                this.grandTotal = parseInt(this.grandTotal - totalCount);
-                if(this.grandTotal < 0){
-                    this.grandTotal = 0;
-                }
-
+                this.subTotalCount();
                 this.grandTotalCounter();
                 $('#addButton').show();
+                // if removed and item decrese the value of i by one to maintain the correct indexing
+                this.i--;
 
             },
+            // Empty search
             removeSearchQuery: function() {
                 this.searchQuery = '';
                 this.isResult = false;
             },
+            // Submit the search to backend and assign the value to result names
             submitSearch: function() {
                 axios.get('/api/indexP?q=' + this.query)
                 .then((data) => {
-                    // console.log(data.data)
                     this.resultName = data.data;
-                    // console.log(this.resultName);
                     
                 })
                 .catch({})
             },
             itemAdd(){
-               let id =  this.item;  
+                // assign an index
+               let id =  this.item;
+                // Search for the query which came from the index id  
                axios.get('/api/indexP?q=' + $(`#${+id}`).children().val())
                 .then((data) => {
-                    // console.log(data.data)
+                    // Get the product from backend
                     this.resultName = data.data;
-                    // console.log(this.resultName);
                     for(let key in this.resultName){
-                        // console.log(this.resultName[key]['product_name']);
+                        // assign the values
                         this.result.id = this.resultName[key]['pid'];
                         this.result.cost = this.resultName[key]['product_cost'];
                         this.result.price = this.resultName[key]['product_price'];
+                        // Assign the cost and price
                         let cost = $(`#${+id}`).siblings().eq(1).children();
                         let price = $(`#${+id}`).siblings().eq(2).children();
                         cost.val(this.result.cost);
                         price.val(this.result.price);
-                        // this.result.cost = '';
-                        // this.result.price = '';
                         this.i++;
                     }
                 })
                 .catch({})
             },
-            totalCount(e){
+            totalCount(){
                 $('#addButton').show();
+                // assign an index
                 let id = this.item;  
-                var totalCount = $(`#${+id}`).siblings().eq(4).children();
-                var curTotal = e.target.value * this.result.cost;
-                totalCount.val(curTotal);
-                this.total = parseInt(this.total + curTotal);
-
+                // Get the values
+                let price = $(`#${+id}`).siblings().eq(2).children();
+                let quantity = $(`#${+id}`).siblings().eq(3).children();
+                let totalInput = $(`#${+id}`).siblings().eq(4).children();
+                // Get total and assign it
+                let total = price.val() * quantity.val();
+                totalInput.val(total);
+                // Count subtotal
+                this.subTotalCount();
+            },
+            subTotalCount(){
+                var subtotal = 0;
+                for(let key in this.items){
+                    let t = $(`#${+key}`).siblings().eq(4).children();
+                    subtotal += parseInt(t.val());
+                }
+                this.subTotal = subtotal;
                 this.grandTotalCounter();
             },
          
@@ -399,13 +409,8 @@
                 this.grandTotalCounter();
             },
             grandTotalCounter(){
-                // if(this.grandTotal <= 0){
-                //     $('#submitButton').hide();
-                // } else{
-                //     $('#submitButton').show();
-                // }
 
-                this.grandTotal = this.total;
+                this.grandTotal = this.subTotal;
 
                 if(this.tax >= 1){
                     this.grandTotal += this.tax;
@@ -418,12 +423,12 @@
             },
             // Customer Section
             customerGet(){
-                // console.log($('#customer_name').val())
                 axios.get('/api/indexC?q=' + $('#customer_name').val())
                 .then((data) => {
                     this.customerNames = data.data;
                 });
             },
+            // Search the customer and add it to customer section
             customerAdd(){
                 axios.get('/api/indexC?q=' + $('#customer_name').val())
                 .then((data) => {
@@ -432,13 +437,6 @@
                         $('#customer_contact').val(this.customerNames[key]['customer_contact']);
                         $('#customer_email').val(this.customerNames[key]['customer_email']);
                     }
-                })
-                .catch({
-                })
-            },
-            addCustomer(){
-                axios.post('/api/store')
-                .then({
                 })
                 .catch({
                 })

@@ -40,7 +40,7 @@
                                     <div class="col-md-4">
                                          <div class="form-group{{ $errors->has('customer_name') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="customer_name">{{ __('Customer Name') }}</label>
-                                                <input type="text" id="customer_name" name="customer_name" @keyup="customerGet" @change="customerAdd" required class="form-control" autocomplete="offf"  list="browsersCustomers">
+                                         <input type="text" id="customer_name" name="customer_name" @keyup="customerGet" @change="customerAdd" required class="form-control" autocomplete="offf"  list="browsersCustomers" value="{{$sale->customer_name}}">
                                                 <datalist id="browsersCustomers">
                                                     <span v-for="name in customerNames ">
                                                         <option v-bind:value="name.customer_name">
@@ -56,7 +56,7 @@
                                     <div class="col-md-4">
                                          <div class="form-group{{ $errors->has('customer_address') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="customer_address">{{ __('Address') }}</label>
-                                            <input type="text" name="customer_address" autocomplete="offf" id="customer_address" class="form-control form-control-alternative{{ $errors->has('customer_address') ? ' is-invalid' : '' }}" value="{{ old('customer_address') }}" required autofocus>
+                                            <input type="text" name="customer_address" autocomplete="offf" id="customer_address" class="form-control form-control-alternative{{ $errors->has('customer_address') ? ' is-invalid' : '' }}" value="{{$sale->customer_address}}" required autofocus>
 
                                             @if ($errors->has('customer_address'))
                                                 <span class="invalid-feedback" role="alert">
@@ -68,7 +68,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group{{ $errors->has('customer_contact') ? ' has-danger' : '' }}">
                                             <label class="form-control-label" for="customer_contact">{{ __('Contact') }}</label>
-                                            <input type="text" name="customer_contact" autocomplete="offf" id="customer_contact" class="form-control form-control-alternative{{ $errors->has('customer_contact') ? ' is-invalid' : '' }}" value="{{ old('customer_contact') }}" required autofocus>
+                                            <input type="text" name="customer_contact" autocomplete="offf" id="customer_contact" class="form-control form-control-alternative{{ $errors->has('customer_contact') ? ' is-invalid' : '' }}" value="{{$sale->customer_contact}}" required autofocus>
 
                                             @if ($errors->has('customer_contact'))
                                                 <span class="invalid-feedback" role="alert">
@@ -109,38 +109,7 @@
                                         </div>
 
                                     <div class="form-group">
-                                        {{-- @foreach(unserialize($sale->items) as $item) --}}
                                             <input type="hidden" id="test" value="{{json_encode(unserialize($sale->items))}}">
-                                        {{-- @endforeach --}}
-                                        {{-- <button class="btn btn-primary" onclick="check()">Check</button>
-                                            @foreach(unserialize($sale->items) as $item)
-                                                <div class="row" >
-                                                    <div class="col-md-4">
-                                                            <input type="text" @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="offf" disabled value="{{$item['product_name']}}">
-                                                    </div> --}}
-                                                    {{-- <datalist id="browsers">
-                                                        <span v-for="name in resultName">
-                                                            <option v-bind:value="name.product_name">
-                                                        </span>
-                                                    </datalist> --}}
-                                                    {{-- <div class="col-md-2">
-                                                    <input type="text" name="costArray[]" class="form-control" value="{{$item['price']}}"  disabled>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="text" name="priceArray[]" class="form-control" disabled value="{{$item['price']}}">
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required value="{{$item['quantity']}}">
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" disabled value="{{$item['quantity'] * $item['price']}}">
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <button class="btn btn-outline-danger" type="button" v-on:click.prevent="rem(item)"id="button-del">X</button>
-                                                    </div>
-                                                </div>
-
-                                            @endforeach --}}
                                         <span v-for="item in items" :key="item.i">
                                             <tr>
                                                 <div class="row" >
@@ -162,7 +131,7 @@
                                                         <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required  >
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" >
+                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" readonly >
                                                     </div>
                                                     <div class="col-md-1">
                                                         <button class="btn btn-outline-danger" type="button" v-on:click.prevent="rem(item)"id="button-del">X</button>
@@ -184,7 +153,7 @@
                                             <label class="form-control-label" for="product-quantity">{{ __('Discount') }}</label>
                                             <input type="number" name="discount" id="product-quantity" 
                                             class="form-control form-control-alternative{{ $errors->has('discount') ? ' is-invalid' : '' }}" 
-                                            value="{{ old('discount') }}" @change="discountCounter"  autofocus>
+                                            value="{{$sale->discount}}" @change="discountCounter"  autofocus>
 
                                             @if ($errors->has('discount'))
                                                 <span class="invalid-feedback" role="alert">
@@ -198,7 +167,7 @@
                                             <label class="form-control-label" for="product-quantity">{{ __('Tax') }}</label>
                                             <input type="number" name="tax" id="product-quantity" 
                                             class="form-control form-control-alternative{{ $errors->has('tax') ? ' is-invalid' : '' }}" 
-                                            value="{{ old('tax') }}" @change="taxCounter" autofocus>
+                                            value="{{$sale->tax}}" @change="taxCounter" autofocus>
 
                                             @if ($errors->has('tax'))
                                                 <span class="invalid-feedback" role="alert">
@@ -231,7 +200,7 @@
                                                 <label class="form-control-label" for="total">{{ __('Sub Total') }}</label>
                                                 <input type="number" name="total" id="total" 
                                                 class="form-control form-control-alternative{{ $errors->has('total') ? ' is-invalid' : '' }}" 
-                                                v-model="subTotal" required autofocus >
+                                                v-model="subTotal" required autofocus readonly>
     
                                                 @if ($errors->has('total'))
                                                     <span class="invalid-feedback" role="alert">
@@ -245,7 +214,7 @@
                                             <label class="form-control-label" for="grand_total">{{ __('Grand Total') }}</label>
                                             <input type="number" name="grand_total" id="grand_total" 
                                             class="form-control form-control-alternative{{ $errors->has('grand_total') ? ' is-invalid' : '' }}" 
-                                            v-model="grandTotal" required autofocus >
+                                            v-model="grandTotal" required autofocus readonly>
 
                                             @if ($errors->has('grand_total'))
                                                 <span class="invalid-feedback" role="alert">
@@ -269,7 +238,7 @@
                                             </div>
                                         </div>
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-success mt-4  float-right" >{{ __('Update') }}</button>
+                                        <button type="submit" class="btn btn-success mt-4  float-right" >{{ __('Update Receipt') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -284,7 +253,7 @@
 
  
 
-    <!-- Modal -->
+    <!-- Modal for Customer Add-->
     <div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -374,6 +343,8 @@
                 $('#addButton').hide();
             },
             rem(item){
+
+                // Get and remove the item from the invoice
                 const todoIndex = this.items.indexOf(item);
                 this.items.splice(todoIndex, 1);
 
@@ -387,13 +358,16 @@
                 this.subTotalCount();
                 this.grandTotalCounter();
                 $('#addButton').show();
+                 // if removed and item decrese the value of i by one to maintain the correct indexing
                 this.i--;
 
             },
+            // Empty search
             removeSearchQuery: function() {
                 this.searchQuery = '';
                 this.isResult = false;
             },
+            // Submit the search to backend and assign the value to result names
             submitSearch: function() {
                 // searching for the query
                 axios.get('/api/indexP?q=' + this.query)
@@ -403,17 +377,19 @@
                 .catch({})
             },
             itemAdd(){
-                let id = this.item;
+                // assign an index
+               let id =  this.item;
+                // Search for the query which came from the index id  
                axios.get('/api/indexP?q=' + $(`#${+id}`).children().val())
                 .then((data) => {
-                    // console.log(data.data)
+                    // Get the product from backend
                     this.resultName = data.data;
-                    // console.log(this.resultName);
                     for(let key in this.resultName){
-                        // console.log(this.resultName[key]['product_name']);
+                        // assign the values
                         this.result.id = this.resultName[key]['pid'];
                         this.result.cost = this.resultName[key]['product_cost'];
                         this.result.price = this.resultName[key]['product_price'];
+                        // Assign the cost and price
                         let cost = $(`#${+id}`).siblings().eq(1).children();
                         let price = $(`#${+id}`).siblings().eq(2).children();
                         cost.val(this.result.cost);
@@ -425,6 +401,7 @@
             },
             totalCount(){
                 $('#addButton').show();
+                // assign an index
                 let id = this.item;  
                 // var itemTotal = $(`#${+id}`).siblings().eq(4).children();
                 // var curTotal = e.target.value * this.result.cost;
@@ -432,8 +409,10 @@
                 let price = $(`#${+id}`).siblings().eq(2).children();
                 let quantity = $(`#${+id}`).siblings().eq(3).children();
                 let totalInput = $(`#${+id}`).siblings().eq(4).children();
+                // Get total and assign it
                 let total = price.val() * quantity.val();
                 totalInput.val(total);
+                // Count subtotal
                 this.subTotalCount();
             },
             subTotalCount(){
@@ -474,12 +453,12 @@
             },
             // Customer Section
             customerGet(){
-                // console.log($('#customer_name').val())
                 axios.get('/api/indexC?q=' + $('#customer_name').val())
                 .then((data) => {
                     this.customerNames = data.data;
                 });
             },
+            // Search the customer and add it to customer section
             customerAdd(){
                 axios.get('/api/indexC?q=' + $('#customer_name').val())
                 .then((data) => {
@@ -490,15 +469,6 @@
                     }
                 })
                 .catch({
-                })
-            },
-            addCustomer(){
-                axios.post('/api/store')
-                .then({
-                    
-                })
-                .catch({
-
                 })
             },
             clear(){
