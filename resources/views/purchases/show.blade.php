@@ -1,7 +1,7 @@
-@extends('layouts.app', ['title' => __('Sale Invoice')])
+@extends('layouts.app', ['title' => __('Purchase Invoice')])
 
 @section('content')
-@include('sales.partials.header', ['title' => __($sale->description)])   
+@include('purchases.partials.header', ['title' => __('')])   
 
 <style>
 body{
@@ -119,8 +119,8 @@ td {
             <div class="col-md-12 col-md-offset-2 col-sm-12 col-sm-offset-2 col-xs-12 brandSection">
                 <div class="row">
                     <div class="col-md-12 col-sm-12 content">
-                        <h1>Invoice<strong> {{ '#0000' . $sale->id }}</strong></h1>
-                        <p>{{ $sale->sale_date }}</p>
+                        <h1>Invoice<strong> {{ '#0000' . $purchase->id }}</strong></h1>
+                        <p>{{ $purchase->purchase_date }}</p>
                         <span>Payment due by 25 November 2020</span>
                     </div>
                     <div class="col-md-12 col-sm-12 panelPart">
@@ -134,10 +134,11 @@ td {
                                       <div class="row pt-3 pl-1">
                                           <br>
                                           <div class="col-md-6 col-sm-6 col-xs-6">
-                                                <h4>{{ $sale->sold_by }}</h4>
-                                                <h4>{{ $sale->customer_address }}</h4>
-                                                <h4>{{ $sale->cutomer_email }}</h4>
-                                                <h4>{{ $sale->customer_contact }}</h4>
+                                                <h4>{{ $purchase->sold_by }}</h4>
+                                                <h4>{{ $purchase->supplier_name }}</h4>
+                                                <h4>{{ $purchase->supplier_address }}</h4>
+                                                <h4>{{ $purchase->supplier_email }}</h4>
+                                                <h4>{{ $purchase->supplier_contact }}</h4>
                                           </div>
                                       </div>
                                   </div>
@@ -153,10 +154,10 @@ td {
                                             <br>
                                             <div class="col-md-6 col-sm-6 col-xs-6">
                                                 {{-- <h1>LOGO</h1> --}}
-                                                <h4>{{ $sale->customer_name }}</h4>
-                                                <h4>{{ $sale->customer_address }}</h4>
-                                                <h4>{{ $sale->cutomer_email }}</h4>
-                                                <h4>{{ $sale->customer_contact }}</h4>
+                                                <h4>{{ $purchase->supplier_name }}</h4>
+                                                <h4>{{ $purchase->supplier_address }}</h4>
+                                                <h4>{{ $purchase->supplier_email }}</h4>
+                                                <h4>{{ $purchase->supplier_contact }}</h4>
                                             </div>
 
                                         </div>
@@ -178,7 +179,7 @@ td {
                                 </tr>
                               </thead>
                               <tbody>
-                                    @foreach( unserialize($sale->items) as $item)
+                                    @foreach( unserialize($purchase->purchases) as $item)
                                    
                                     @php
                                     @endphp
@@ -213,10 +214,10 @@ td {
                                                         <p>TOTAL</p>
                                                       </div>
                                                       <div class="col-md-7 col-sm-6 col-xs-6 panelLastRight">
-                                                        <p>{{$sale->total}}</p>
-                                                        <p>{{$sale->tax}}</p>
-                                                        <p>{{$sale->discount}}</p>
-                                                        <p><strong>{{$sale->grand_total}}</strong></p>
+                                                        <p>{{$purchase->total}}</p>
+                                                        <p>{{$purchase->tax}}</p>
+                                                        <p>{{$purchase->discount}}</p>
+                                                        <p><strong>{{$purchase->grand_total}}</strong></p>
                                                       </div>
                                                   </div>
                                               </div>

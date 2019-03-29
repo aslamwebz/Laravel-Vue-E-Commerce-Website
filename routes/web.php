@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('sales', 'SalesController');
 	Route::resource('customers', 'CustomerController');
 	Route::resource('purchases', 'PurchaseController');
+	Route::resource('suppliers', 'SupplierController');
 	// Route::resource('orders', 'OrderController');
 	// Route::resource('projects', 'ProjectController');
 	// Route::resource('messages', 'MessageController');

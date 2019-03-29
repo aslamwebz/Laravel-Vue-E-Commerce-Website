@@ -136,7 +136,7 @@ td {
                                           <div class="col-md-6 col-sm-6 col-xs-6">
                                                 <h4>{{ $sale->sold_by }}</h4>
                                                 <h4>{{ $sale->customer_address }}</h4>
-                                                <h4>{{ $sale->cutomer_email }}</h4>
+                                                <h4>{{ $sale->customer_email }}</h4>
                                                 <h4>{{ $sale->customer_contact }}</h4>
                                           </div>
                                       </div>
@@ -155,7 +155,7 @@ td {
                                                 {{-- <h1>LOGO</h1> --}}
                                                 <h4>{{ $sale->customer_name }}</h4>
                                                 <h4>{{ $sale->customer_address }}</h4>
-                                                <h4>{{ $sale->cutomer_email }}</h4>
+                                                <h4>{{ $sale->customer_email }}</h4>
                                                 <h4>{{ $sale->customer_contact }}</h4>
                                             </div>
 

@@ -20,7 +20,7 @@ class CreatePurchasesTable extends Migration
             $table->string('supplier_name');
             $table->string('supplier_address');
             $table->string('supplier_contact');
-            $table->string('supplier_email');
+            $table->string('supplier_email')->nullable();
             $table->string('payment_type');
             $table->decimal('discount', 8, 2)->nullable();
             $table->decimal('tax', 8, 2)->nullable();

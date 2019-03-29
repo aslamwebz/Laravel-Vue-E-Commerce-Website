@@ -75,15 +75,11 @@ class SalesController extends Controller
         ]);
       
 
-        $count = 0;
         $name_array = $request->nameArray;
         $quantity_array = $request->quantityArray;
         $cost_array = $request->costArray;
         $price_array = $request->priceArray;
-        // dd($quantity_array);
-        // foreach($name_array as $a){
-        //    array_push($sale_array,$a,$quantity_array[$count++]);
-        // }
+    
 
         foreach($name_array as $a => $b){
             $product = Product::where('product_name', 'LIKE', '%'.$b.'%')->get();
@@ -160,8 +156,8 @@ class SalesController extends Controller
         // Get all respected array info from request to new array
         $name_array = $request->nameArray;
         $quantity_array = $request->quantityArray;
-        $cost_array = $request->quantityArray;
-        $price_array = $request->quantityArray;
+        $cost_array = $request->costArray;
+        $price_array = $request->priceArray;
 
         // assign values from the respected input arrays and create an array for serialization
         foreach($name_array as $a => $b){

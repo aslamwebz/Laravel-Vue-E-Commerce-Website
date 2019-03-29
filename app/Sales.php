@@ -11,7 +11,6 @@ class Sales extends Model
         'customer_name',
         'customer_address',
         'customer_contact',
-        'customer_email',
         'payment_type',
         'discount',
         'tax',

@@ -228,7 +228,7 @@
                                                 <label class="form-control-label" for="sold_by">{{ __('Seller') }}</label>
                                                 <input type="text" name="sold_by" id="sold_by" 
                                                 class="form-control form-control-alternative{{ $errors->has('sold_by') ? ' is-invalid' : '' }}" 
-                                                value="{{  auth()->user()->name }}"  required autofocus autocomplete="offf">
+                                                value="{{  $sale->sold_by }}"  required autofocus autocomplete="offf">
 
                                                 @if ($errors->has('sold_by'))
                                                     <span class="invalid-feedback" role="alert">
