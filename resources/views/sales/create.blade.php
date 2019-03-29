@@ -111,7 +111,7 @@
                                             <tr>
                                                 <div class="row" >
                                                     <div class="col-md-4" v-bind:id="item">
-                                                        <input type="text"  @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="offf"  list="browsers">
+                                                        <input type="text" @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="offf"  list="browsers">
                                                     </div>
                                                     <datalist id="browsers">
                                                         <span v-for="name in resultName ">
@@ -119,10 +119,10 @@
                                                         </span>
                                                     </datalist>
                                                     <div class="col-md-2">
-                                                        <input type="text" name="costArray[]" class="form-control" >
+                                                        <input type="text" name="costArray[]" class="form-control">
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="text" name="priceArray[]" class="form-control" disabled>
+                                                        <input type="text" name="priceArray[]" class="form-control">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required>
@@ -439,10 +439,8 @@
             addCustomer(){
                 axios.post('/api/store')
                 .then({
-                    
                 })
                 .catch({
-
                 })
             },
             clear(){

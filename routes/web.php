@@ -10,18 +10,17 @@ Route::get('/test', function () {
 
 Route::post('/sales/test', 'SalesController@test')->name('sales.test');
 
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('product', 'ProductController');
 	Route::resource('sales', 'SalesController');
 	Route::resource('customers', 'CustomerController');
-	Route::resource('orders', 'OrderController');
+	Route::resource('purchases', 'PurchaseController');
+	// Route::resource('orders', 'OrderController');
 	// Route::resource('projects', 'ProjectController');
 	// Route::resource('messages', 'MessageController');
 	// Route::resource('softwares', 'SoftwareController');

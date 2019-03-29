@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sales extends Model
+class purchase extends Model
 {
     protected $fillable = [
         'sale_date',
-        'customer_name',
-        'customer_address',
-        'customer_contact',
-        'customer_email',
+        'supplier_name',
+        'supplier_address',
+        'supplier_contact',
+        'supplier_email',
         'payment_type',
         'discount',
         'tax',
@@ -20,5 +20,4 @@ class Sales extends Model
         'sold_by',
         'items',
     ];
-
 }

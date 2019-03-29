@@ -88,13 +88,13 @@
                         <i class="ni ni-single-02 text-yellow"></i> {{ __('User profile') }}
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="fas fa-newspaper text-info"></i> {{ __('Content Management') }}
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{route('purchases.index')}}">
                         <i class="fas fa-shopping-cart text-orange"></i> {{ __('Purchases') }}
                     </a>
                 </li>
@@ -113,31 +113,31 @@
                         <i class="fas fa-users text-orange"></i> {{ __('Customers') }}
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="{{route('orders.index')}}">
                         <i class="fas fa-file-invoice text-orange"></i> {{ __('Orders') }}
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="fas fa-user-cog text-info"></i> {{ __('Services') }}
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="fas fa-server text-info"></i> {{ __('Projects') }}
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="fas fa-envelope text-info"></i> {{ __('Messages') }}
                     </a>
-                </li>
-                <li class="nav-item">
+                </li> --}}
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="fab fa-windows text-info"></i> {{ __('Software Management') }}
                     </a>
-                </li>
+                </li> --}}
                 </ul>
                 <!-- Divider -->
             <hr class="my-3">

@@ -32,10 +32,9 @@
                     </div>
                     <div class="col-md-12">
                         <div class="card-body">
-                            <form method="POST" action="{{ route('sales.update', $sale->id) }}"  autocomplete="offf" >
+                            <form method="POST" action="{{ route('sales.store') }}"  autocomplete="offf" >
                                 @csrf
-                                @method('put')
-                                <h6 class="heading-small text-muted mb-4">{{ __('Edit Sales Data') }}</h6>
+                                <h6 class="heading-small text-muted mb-4">{{ __('Add Sales Data') }}</h6>
                                 <div class="row border-box mt--4">
                                     <div class="col-md-4">
                                          <div class="form-group{{ $errors->has('customer_name') ? ' has-danger' : '' }}">
@@ -107,45 +106,12 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                     <div class="form-group">
-                                        {{-- @foreach(unserialize($sale->items) as $item) --}}
-                                            <input type="hidden" id="test" value="{{json_encode(unserialize($sale->items))}}">
-                                        {{-- @endforeach --}}
-                                        {{-- <button class="btn btn-primary" onclick="check()">Check</button>
-                                            @foreach(unserialize($sale->items) as $item)
-                                                <div class="row" >
-                                                    <div class="col-md-4">
-                                                            <input type="text" @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="offf" disabled value="{{$item['product_name']}}">
-                                                    </div> --}}
-                                                    {{-- <datalist id="browsers">
-                                                        <span v-for="name in resultName">
-                                                            <option v-bind:value="name.product_name">
-                                                        </span>
-                                                    </datalist> --}}
-                                                    {{-- <div class="col-md-2">
-                                                    <input type="text" name="costArray[]" class="form-control" value="{{$item['price']}}"  disabled>
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="text" name="priceArray[]" class="form-control" disabled value="{{$item['price']}}">
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required value="{{$item['quantity']}}">
-                                                    </div>
-                                                    <div class="col-md-2">
-                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" disabled value="{{$item['quantity'] * $item['price']}}">
-                                                    </div>
-                                                    <div class="col-md-1">
-                                                        <button class="btn btn-outline-danger" type="button" v-on:click.prevent="rem(item)"id="button-del">X</button>
-                                                    </div>
-                                                </div>
-
-                                            @endforeach --}}
                                         <span v-for="item in items" :key="item.i">
                                             <tr>
                                                 <div class="row" >
                                                     <div class="col-md-4" v-bind:id="item">
-                                                        <input type="text"  @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="offf"  list="browsers" >
+                                                        <input type="text"  @keyup="submitSearch" @change="itemAdd" name="nameArray[]"  required class="form-control" autocomplete="offf"  list="browsers">
                                                     </div>
                                                     <datalist id="browsers">
                                                         <span v-for="name in resultName ">
@@ -156,13 +122,13 @@
                                                         <input type="text" name="costArray[]" class="form-control" >
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="text" name="priceArray[]" class="form-control" disabled >
+                                                        <input type="text" name="priceArray[]" class="form-control" disabled>
                                                     </div>
                                                     <div class="col-md-1">
-                                                        <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required  >
+                                                        <input type="text" name="quantityArray[]" class="form-control" @change="totalCount" required>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" >
+                                                        <input type="text" sname="totalArray[]" class="form-control" id="total" disabled>
                                                     </div>
                                                     <div class="col-md-1">
                                                         <button class="btn btn-outline-danger" type="button" v-on:click.prevent="rem(item)"id="button-del">X</button>
@@ -231,7 +197,7 @@
                                                 <label class="form-control-label" for="total">{{ __('Sub Total') }}</label>
                                                 <input type="number" name="total" id="total" 
                                                 class="form-control form-control-alternative{{ $errors->has('total') ? ' is-invalid' : '' }}" 
-                                                v-model="subTotal" required autofocus >
+                                                v-model="total" required autofocus >
     
                                                 @if ($errors->has('total'))
                                                     <span class="invalid-feedback" role="alert">
@@ -269,7 +235,7 @@
                                             </div>
                                         </div>
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-success mt-4  float-right" >{{ __('Update') }}</button>
+                                        <button type="submit" class="btn btn-success mt-4  float-right" >{{ __('Add') }}</button>
                                     </div>
                                 </div>
                             </form>
@@ -328,20 +294,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <script>
-
-    let products;
-    check();
-
-    function check(e){
-        let test = document.getElementById('test');
-        products = JSON.parse(test.value);
-
-    }
-
     const app = new Vue({
         el:'#createApp',
         data:{
@@ -356,19 +311,18 @@
                 price:'price',
             }],
             currentItem:'',
-            subTotal:'',
+            total:'',
             grandTotal:'',
             tax:'',
             customerNames:[],
         },
         mounted(){
+            this.items.push(this.item);
+            // $('#submitButton').hide();
             $('#addButton').hide();
-            // Get Current Invoices
-            this.getInvoices();
         },
         methods:{
             add(){
-                // Adding an item with a numeric val to serve as a key point and push it to item array
                 this.item = this.i;
                 this.items.push(this.item);
                 $('#addButton').hide();
@@ -377,17 +331,15 @@
                 const todoIndex = this.items.indexOf(item);
                 this.items.splice(todoIndex, 1);
 
-                // let id = item;
-                // var totalCount = $(`#${+id}`).siblings().eq(4).children().val();
-                // this.grandTotal = parseInt(this.grandTotal - totalCount);
-                // if(this.grandTotal < 0){
-                //     this.grandTotal = 0;
-                // }
+                let id = item;
+                var totalCount = $(`#${+id}`).siblings().eq(4).children().val();
+                this.grandTotal = parseInt(this.grandTotal - totalCount);
+                if(this.grandTotal < 0){
+                    this.grandTotal = 0;
+                }
 
-                this.subTotalCount();
                 this.grandTotalCounter();
                 $('#addButton').show();
-                this.i--;
 
             },
             removeSearchQuery: function() {
@@ -395,15 +347,17 @@
                 this.isResult = false;
             },
             submitSearch: function() {
-                // searching for the query
                 axios.get('/api/indexP?q=' + this.query)
                 .then((data) => {
+                    // console.log(data.data)
                     this.resultName = data.data;
+                    // console.log(this.resultName);
+                    
                 })
                 .catch({})
             },
             itemAdd(){
-                let id = this.item;
+               let id =  this.item;  
                axios.get('/api/indexP?q=' + $(`#${+id}`).children().val())
                 .then((data) => {
                     // console.log(data.data)
@@ -418,33 +372,24 @@
                         let price = $(`#${+id}`).siblings().eq(2).children();
                         cost.val(this.result.cost);
                         price.val(this.result.price);
+                        // this.result.cost = '';
+                        // this.result.price = '';
                         this.i++;
                     }
                 })
                 .catch({})
             },
-            totalCount(){
+            totalCount(e){
                 $('#addButton').show();
                 let id = this.item;  
-                // var itemTotal = $(`#${+id}`).siblings().eq(4).children();
-                // var curTotal = e.target.value * this.result.cost;
-                // itemTotal.val(curTotal);
-                let price = $(`#${+id}`).siblings().eq(2).children();
-                let quantity = $(`#${+id}`).siblings().eq(3).children();
-                let totalInput = $(`#${+id}`).siblings().eq(4).children();
-                let total = price.val() * quantity.val();
-                totalInput.val(total);
-                this.subTotalCount();
-            },
-            subTotalCount(){
-                var subtotal = 0;
-                for(let key in this.items){
-                    let t = $(`#${+key}`).siblings().eq(4).children();
-                    subtotal += parseInt(t.val());
-                }
-                this.subTotal = subtotal;
+                var totalCount = $(`#${+id}`).siblings().eq(4).children();
+                var curTotal = e.target.value * this.result.cost;
+                totalCount.val(curTotal);
+                this.total = parseInt(this.total + curTotal);
+
                 this.grandTotalCounter();
             },
+         
             taxCounter(e){
                 this.tax = parseInt(this.grandTotal * e.target.value /100);
                 this.grandTotalCounter();
@@ -460,8 +405,7 @@
                 //     $('#submitButton').show();
                 // }
 
-
-                this.grandTotal = this.subTotal;
+                this.grandTotal = this.total;
 
                 if(this.tax >= 1){
                     this.grandTotal += this.tax;
@@ -506,59 +450,6 @@
                 $('#customer_address').val('');
                 $('#customer_contact').val('');
                 $('#customer_email').val('');
-            },
-            getInvoices(){
-                // products.forEach(data => {
-                //    data['price'] = parseInt(data['price']);
-                //    data['quantity'] = parseInt(data['quantity']);
-                //    console.log(data);
-                //     this.items.push(data);
-                //     this.i++;
-                // });
-
-                products.forEach(product => {
-                    this.item = this.i;
-                    this.getProduct(product);
-                    this.items.push(this.item);
-                    this.i++;
-                });               
-                $('#addButton').show();
-
-
-            },
-            getProduct(product){
-                // console.log(product['product_name']);
-                let id = this.item;
-                axios.get('/api/indexP?q=' + product['product_name'])
-                    .then((data) => {
-                    this.resultName = data.data;
-                    // console.log(this.resultName);
-                    for(let key in this.resultName){
-                        // console.log(this.resultName[key]['product_name']);
-                        this.result.id = this.resultName[key]['pid'];
-                        this.result.name = this.resultName[key]['product_name'];
-                        this.result.cost = this.resultName[key]['product_cost'];
-                        this.result.price = this.resultName[key]['product_price'];
-                        this.result.quantity = product['quantity'];
-                        let totalval =  this.result.price * this.result.quantity;
-                        // this.total = parseInt(this.total + totalval);
-                        let name = $(`#${+id}`).children();
-                        let cost = $(`#${+id}`).siblings().eq(1).children();
-                        let price = $(`#${+id}`).siblings().eq(2).children();
-                        let quantity = $(`#${+id}`).siblings().eq(3).children();
-                        let total = $(`#${+id}`).siblings().eq(4).children();
-                        name.val(this.result.name);
-                        cost.val(this.result.cost);
-                        price.val(this.result.price);
-                        quantity.val(this.result.quantity);
-                        total.val(totalval);
-                        // this.result.cost = '';
-                        // this.result.price = '';
-                        this.subTotalCount();
-
-                    }
-                })
-                .catch({})
             }
 
 

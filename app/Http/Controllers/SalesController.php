@@ -15,36 +15,36 @@ class SalesController extends Controller
      */
     public function index(Sales $sales)
     {
-        // $sales = Sales::all();
-        // $items = unserialize($sales[0][0]);
         return view('sales.index',compact('product'), ['sales' => $sales->paginate(10)]);
     }
 
-    public function test(Request $request){
-        // dd($request);
-        // dd($request->dataArray);
-        $data = $request->dataArray;
-        $dataCount = count($request->dataArray);
-        $count=0;
-        foreach($data as $d){
-            $data[$count++] = $d;
-            // array_push($data,$d);
-        }
-        // return $dataCount;
-        // for ($i=0; $i < $dataCount ; $i++) { 
-        //     $data = array($i => $request->dataArray[$i]);
-        // }
-        // dd($request->dataArray);
-        // $data = serialize($data);
-        // $udata = unserialize($data);
-        // $udata = $request->dataArray;
-        // dd($data);
-        foreach($data as $k => $v){
-            echo $k . $v;
-        }
-        // return $data[1];
+    // public function test(Request $request){
+    //     // dd($request);
+    //     // dd($request->dataArray);
+    //     $data = $request->dataArray;
+    //     $dataCount = count($request->dataArray);
+    //     $count=0;
+    //     foreach($data as $d){
+    //         $data[$count++] = $d;
+    //         // array_push($data,$d);
+    //     }
+    //     // return $dataCount;
+    //     // for ($i=0; $i < $dataCount ; $i++) { 
+    //     //     $data = array($i => $request->dataArray[$i]);
+    //     // }
+    //     // dd($request->dataArray);
+    //     // $data = serialize($data);
+    //     // $udata = unserialize($data);
+    //     // $udata = $request->dataArray;
+    //     // dd($data);
+    //     foreach($data as $k => $v){
+    //         echo $k . $v;
+    //     }
+    //     // return $data[1];
+        // $items = json_encode($products);
+
         
-    }
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -78,8 +78,8 @@ class SalesController extends Controller
         $count = 0;
         $name_array = $request->nameArray;
         $quantity_array = $request->quantityArray;
-        $cost_array = $request->quantityArray;
-        $price_array = $request->quantityArray;
+        $cost_array = $request->costArray;
+        $price_array = $request->priceArray;
         // dd($quantity_array);
         // foreach($name_array as $a){
         //    array_push($sale_array,$a,$quantity_array[$count++]);
@@ -88,8 +88,7 @@ class SalesController extends Controller
         foreach($name_array as $a => $b){
             $product = Product::where('product_name', 'LIKE', '%'.$b.'%')->get();
             $products[$a]['id'] = $product[0]['pid'];
-            $products[$a]['product_name'] = $product
-            [0]['product_name'];
+            $products[$a]['product_name'] = $product[0]['product_name'];
             $products[$a]['quantity'] = $quantity_array[$a];
             $products[$a]['price'] = $price_array[$a];
             $products[$a]['cost'] = $cost_array[$a];
@@ -102,9 +101,12 @@ class SalesController extends Controller
         $request->merge(['sale_date' => $date]);
         $request->merge(['items' => $items]);
 
-
-
         if(Sales::create($request->all())){
+            foreach($name_array as $a => $b){
+                $product = Product::where('product_name', 'LIKE', '%'.$b.'%')->get();
+                $product[0]['product_quantity'] -= $quantity_array[$a];
+                $product[0]->save(['timestamps' => false]);
+            }
             return redirect()->route('sales.index')->with('success', "Invoice added successfully");
         } else {
             return redirect()->route('sales.create')->with('error', "Invoice error");
@@ -144,25 +146,62 @@ class SalesController extends Controller
      */
     public function update(Request $request, Sales $sale)
     {
-        $request->validate([
-            'sold_to' => 'required|string|max:255',
-            'payment_method' => 'required|string|max:255',
-            'quantity' => 'required|numeric|between:0,9999.99',
-            'description' => 'required|string',
-            'unit_price' => 'required|numeric|between:0,9999.99',
-            'discount' => 'required|numeric|between:0,9999.99',
-            'sold_by' => 'required|string|max:255',
-            'total' =>  'required|numeric',
 
+        $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'customer_address' => 'required|string|max:255',
+            'customer_contact' => 'required|string|max:255',
+            'payment_type' => 'required|string|max:255',
+            'grand_total' => 'required',
+            'sold_by' => 'required|string|max:255',
         ]);
 
+
+        // Get all respected array info from request to new array
+        $name_array = $request->nameArray;
+        $quantity_array = $request->quantityArray;
+        $cost_array = $request->quantityArray;
+        $price_array = $request->quantityArray;
+
+        // assign values from the respected input arrays and create an array for serialization
+        foreach($name_array as $a => $b){
+            $product = Product::where('product_name', 'LIKE', '%'.$b.'%')->get();
+            $products[$a]['id'] = $product[0]['pid'];
+            $products[$a]['product_name'] = $product[0]['product_name'];
+            $products[$a]['quantity'] = $quantity_array[$a];
+            $products[$a]['price'] = $price_array[$a];
+            $products[$a]['cost'] = $cost_array[$a];
+        }
+
         $date = date('Y:m:d');
+        // Serialize and merge the data to store in database
+        $items = serialize($products);
+        $request->merge(['sale_date' => $date]);
+        $request->merge(['items' => $items]);
 
-        $request->merge(['date' => $date]);
 
-        $sale::update($request->all());
+        
+        $saleProducts = unserialize($sale->items);
+        // Add older quantities again to product quantity table to prevent mis calculated quantity reductions
+        foreach ($saleProducts as $key => $value) {
+            $product = Product::where('product_name', 'LIKE', '%'. $saleProducts[$key]['product_name'].'%')->get();
+            $product[0]['product_quantity'] += $saleProducts[$key]['quantity'];
+            $product[0]->save(['timestamps' => false]);
+        }
 
-        return redirect()->route('sales.index')->with('success', "Invoice updated successfully");
+
+        if($sale->update($request->all())){
+            // If sale does not pose any error reduce products form products table
+            foreach($name_array as $a => $b){
+                $product = Product::where('product_name', 'LIKE', '%'.$b.'%')->get();
+                $product[0]['product_quantity'] -= $quantity_array[$a];
+                $product[0]->save(['timestamps' => false]);
+            }
+            return redirect()->route('sales.index')->with('success', "Invoice updated successfully");
+        } else {
+            return redirect()->route('sales.index')->with('error', "Invoice update failed");
+        }
+
     }
 
     /**
